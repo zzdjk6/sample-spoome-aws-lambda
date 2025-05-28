@@ -1,4 +1,4 @@
-import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
+import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import axios from "axios";
 
 /**
@@ -12,43 +12,35 @@ import axios from "axios";
  */
 
 export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-    try {
-        const longUrl = event.queryStringParameters?.url;
-        if (!longUrl) {
-            return {
-                statusCode: 400,
-                body: JSON.stringify({ message: 'url is required' }),
-            };
-        }
-        const shortUrl = await generateShortUrl(longUrl);
-        return {
-            statusCode: 200,
-            body: JSON.stringify({ shortUrl }),
-        };
-    } catch (err) {
-        console.log(err);
-        return {
-            statusCode: 500,
-            body: JSON.stringify({
-                message: 'some error happened',
-            }),
-        };
-    }
+  try {
+    const longUrl = "https://medium.com/@zzdjk6/generate-short-url-on-aws-lambda-using-free-api-spoo-me-8dc21849d963";
+    const shortUrl = await generateShortUrl(longUrl);
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ shortUrl }),
+    };
+  } catch (err: any) {
+    console.log("request config: ", err?.response?.config);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({
+        message: "some error happened",
+      }),
+    };
+  }
 };
 
 const generateShortUrl = async (longUrl: string) => {
-    const url = "https://spoo.me/";
-    const payload = {
-        url: longUrl,
-    };
-    const config = {
-        headers: {
-            "content-type": "application/x-www-form-urlencoded",
-            Accept: "application/json",
-        },
-    };
-
-    const response = await axios.post(url, payload, config);
-    const shortUrl = response.data.short_url;
-    return shortUrl;
-}
+  const response = await axios.post(
+    "https://spoo.me/",
+    { url: longUrl },
+    {
+      headers: {
+        "content-type": "application/x-www-form-urlencoded",
+        Accept: "application/json",
+      },
+    }
+  );
+  const shortUrl = response.data.short_url;
+  return shortUrl;
+};
