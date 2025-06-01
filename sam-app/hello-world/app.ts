@@ -13,11 +13,12 @@ import axios from "axios";
 
 export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   try {
-    const longUrl = "https://medium.com/@zzdjk6/generate-short-url-on-aws-lambda-using-free-api-spoo-me-8dc21849d963";
+    const longUrl =
+      "https://javascript.plainenglish.io/generate-short-urls-on-aws-lambda-using-free-api-spoo-me-8dc21849d963";
     const shortUrl = await generateShortUrl(longUrl);
     return {
       statusCode: 200,
-      body: JSON.stringify({ shortUrl }),
+      body: JSON.stringify({ longUrl, shortUrl }),
     };
   } catch (err: any) {
     console.log("request config: ", err?.response?.config);
